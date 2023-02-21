@@ -1,6 +1,7 @@
 package satellite
 
 import (
+	"fmt"
 	"math"
 	"strconv"
 	"strings"
@@ -48,14 +49,14 @@ func ParseTLE(line1, line2 string, gravConst Gravity) (*Satellite, error) {
 
 	// These three can be negative / positive
 	sat.ndot = parseFloat(strings.Replace(line1[33:43], " ", "", 2))
-	sat.nddot = parseFloat(strings.Replace(line1[44:45]+"."+line1[45:50]+"e"+line1[50:52], " ", "", 2))
-	sat.bstar = parseFloat(strings.Replace(line1[53:54]+"."+line1[54:59]+"e"+line1[59:61], " ", "", 2))
+	sat.nddot = parseFloat(strings.Replace(fmt.Sprintf("%s.%se%s", line1[44:45], line1[45:50], line1[50:52]), " ", "", 2))
+	sat.bstar = parseFloat(strings.Replace(fmt.Sprintf("%s.%se%s", line1[53:54], line1[54:59], line1[59:61]), " ", "", 2))
 	// LINE 1 END
 
 	// LINE 2 BEGIN
 	sat.inclo = parseFloat(strings.Replace(line2[8:16], " ", "", 2))
 	sat.nodeo = parseFloat(strings.Replace(line2[17:25], " ", "", 2))
-	sat.ecco = parseFloat("." + line2[26:33])
+	sat.ecco = parseFloat(fmt.Sprintf(".%s", line2[26:33]))
 	sat.argpo = parseFloat(strings.Replace(line2[34:42], " ", "", 2))
 	sat.mo = parseFloat(strings.Replace(line2[43:51], " ", "", 2))
 	sat.no = parseFloat(strings.Replace(line2[52:63], " ", "", 2))
