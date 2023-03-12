@@ -1,8 +1,9 @@
-package satellite
+package spacetrack
 
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/pmcanseco/go-satellite"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -61,8 +62,8 @@ func NewSpacetrack(username, password string) *Spacetrack {
 }
 
 // GetTLE generates a Satellite from the most recent TLE from space-track.org before the given time
-func (s *Spacetrack) GetTLE(catid uint64, ts time.Time, gravConst Gravity) (Satellite, error) {
-	zero := Satellite{}
+func (s *Spacetrack) GetTLE(catid uint64, ts time.Time, gravConst satellite.Gravity) (satellite.Satellite, error) {
+	zero := satellite.Satellite{}
 	args := spacetrackArgs{
 		base:         baseurl,
 		class:        tle,
@@ -101,7 +102,7 @@ func (s *Spacetrack) GetTLE(catid uint64, ts time.Time, gravConst Gravity) (Sate
 		return zero, err
 	}
 
-	var sats []Satellite
+	var sats []satellite.Satellite
 	if err := json.Unmarshal(respData, &sats); err != nil {
 		return zero, err
 	}
@@ -109,7 +110,7 @@ func (s *Spacetrack) GetTLE(catid uint64, ts time.Time, gravConst Gravity) (Sate
 		return zero, errors.Wrap(ErrNotSingleSat, fmt.Sprint(sats))
 
 	}
-	sat, err := TLEToSat(sats[0].Line1, sats[0].Line2, gravConst)
+	sat, err := satellite.TLEToSat(sats[0].Line1, sats[0].Line2, gravConst)
 	return *sat, nil
 }
 

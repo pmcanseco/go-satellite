@@ -1,9 +1,15 @@
-package satellite
+package spacetrack
 
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"testing"
 )
+
+func TestSpacetrack(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "spacetrack Suite")
+}
 
 var _ = Describe("spacetrack tests", func() {
 	type args struct {
