@@ -83,7 +83,7 @@ func TLEToSat(line1, line2 string, gravConst Gravity) (*Satellite, error) {
 	sat.argpo = sat.argpo * DEG2RAD
 	sat.mo = sat.mo * DEG2RAD
 
-	var year int64 = 0
+	var year int64
 	if sat.epochyr < 57 {
 		year = sat.epochyr + 2000
 	} else {

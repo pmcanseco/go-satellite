@@ -1,7 +1,7 @@
 package satellite
 
 import (
-	"github.com/pkg/errors"
+	"errors"
 	"math"
 )
 

@@ -15,7 +15,7 @@ type DeepSpaceResult struct {
 }
 
 // this procedure provides deep space contributions to mean motion dot due to geopotential resonance with half day and one day orbits.
-func dsinit(whichconst GravConst, cosim, emsq, argpo, s1, s2, s3, s4, s5, sinim, ss1, ss2, ss3, ss4, ss5, sz1, sz3, sz11, sz13, sz21, sz23, sz31, sz33, t, tc, gsto, mo, mdot, no, nodeo, nodedot, xpidot, z1, z3, z11, z13, z21, z23, z31, z33, ecco, eccsq, em, argpm, inclm, mm, nm, nodem, irez, atime, d2201, d2211, d3210, d3222, d4410, d4422, d5220, d5232, d5421, d5433, dedt, didt, dmdt, dnodt, domdt, del1, del2, del3, xfact, xlamo, xli, xni float64) (res DeepSpaceInitResult) {
+func dsinit(whichconst GravConst, cosim, emsq, argpo, s1, s2, s3, s4, s5, sinim, ss1, ss2, ss3, ss4, ss5, sz1, sz3, sz11, sz13, sz21, sz23, sz31, sz33, t, tc, gsto, mo, mdot, no, nodeo, nodedot, xpidot, z1, z3, z11, z13, z21, z23, z31, z33, ecco, eccsq, em, argpm, inclm, mm, nm, nodem, atime, d2201, d2211, d3210, d3222, d4410, d4422, d5220, d5232, d5421, d5433, del1, del2, del3, xfact, xlamo, xli, xni float64) (res DeepSpaceInitResult) {
 
 	var f220, f221, f311, f321, f322, f330, f441, f442, f522, f523, f542, f543, g200, g201, g211, g300, g310, g322, g410, g422, g520, g521, g532, g533, sini2, temp, temp1, theta, xno2, ainv2, aonv, cosisq, eoc float64
 
@@ -34,7 +34,7 @@ func dsinit(whichconst GravConst, cosim, emsq, argpo, s1, s2, s3, s4, s5, sinim,
 
 	xke := whichconst.xke
 
-	irez = 0
+	irez := float64(0)
 	if 0.0034906585 < nm && nm < 0.0052359877 {
 		irez = 1
 	}
@@ -56,17 +56,17 @@ func dsinit(whichconst GravConst, cosim, emsq, argpo, s1, s2, s3, s4, s5, sinim,
 	}
 	sgs := sghs - cosim*shs
 
-	dedt = ses + s1*znl*s5
-	didt = sis + s2*znl*(z11+z13)
-	dmdt = sls - znl*s3*(z1+z3-14.0-6.0*emsq)
+	dedt := ses + s1*znl*s5
+	didt := sis + s2*znl*(z11+z13)
+	dmdt := sls - znl*s3*(z1+z3-14.0-6.0*emsq)
 	sghl := s4 * znl * (z31 + z33 - 6.0)
 	shll := -znl * s2 * (z21 + z23)
 
 	if inclm < 5.2359877e-2 || inclm > math.Pi-5.2359877e-2 {
 		shll = 0.0
 	}
-	domdt = sgs + sghl
-	dnodt = shs
+	domdt := sgs + sghl
+	dnodt := shs
 
 	if sinim != 0.0 {
 		domdt = domdt - cosim/sinim*shll
@@ -460,7 +460,7 @@ type DSComResults struct {
 }
 
 // this procedure provides deep space common items used by both the secular and periodics subroutines. input is provided as shown. this routine used to be called dpper, but the functions inside weren't well organized.
-func dscom(epoch, ep, argpp, tc, inclp, nodep, np, e3, ee2, peo, pgho, pho, pinco, plo, se2, se3, sgh2, sgh3, sgh4, sh2, sh3, si2, si3, sl2, sl3, sl4, xgh2, xgh3, xgh4, xh2, xh3, xi2, xi3, xl2, xl3, xl4, zmol, zmos float64) (res DSComResults) {
+func dscom(epoch, ep, argpp, tc, inclp, nodep, np float64) (res DSComResults) {
 	var a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, betasq, cc, ctem, stem, x1, x2, x3, x4, x5, x6, x7, x8, xnodce, xnoi, zcosg, zsing, zcosgl, zsingl, zcosh, zsinh, zcoshl, zsinhl, zcosi, zsini, zcosil, zsinil, zx, zy, ss1, ss2, ss3, ss4, ss5, ss6, ss7, sz1, sz2, sz3, sz11, sz12, sz13, sz21, sz22, sz23, sz31, sz32, sz33, s1, s2, s3, s4, s5, s6, s7, z1, z2, z3, z11, z12, z13, z21, z22, z23, z31, z32, z33 float64
 
 	zes := 0.01675
@@ -484,11 +484,11 @@ func dscom(epoch, ep, argpp, tc, inclp, nodep, np, e3, ee2, peo, pgho, pho, pinc
 	betasq = 1.0 - emsq
 	rtemsq := math.Sqrt(betasq)
 
-	peo = 0.0
-	pinco = 0.0
-	plo = 0.0
-	pgho = 0.0
-	pho = 0.0
+	peo := 0.0
+	pinco := 0.0
+	plo := 0.0
+	pgho := 0.0
+	pho := 0.0
 	day := epoch + 18261.5 + tc/1440.0
 	xnodce = math.Mod(4.5236020-9.2422029e-4*day, TWOPI)
 	stem = math.Sin(xnodce)
@@ -588,34 +588,34 @@ func dscom(epoch, ep, argpp, tc, inclp, nodep, np, e3, ee2, peo, pgho, pho, pinc
 		}
 	}
 
-	zmol = math.Mod(4.7199672+0.22997150*day-gam, TWOPI)
-	zmos = math.Mod(6.2565837+0.017201977*day, TWOPI)
+	zmol := math.Mod(4.7199672+0.22997150*day-gam, TWOPI)
+	zmos := math.Mod(6.2565837+0.017201977*day, TWOPI)
 
-	se2 = 2.0 * ss1 * ss6
-	se3 = 2.0 * ss1 * ss7
-	si2 = 2.0 * ss2 * sz12
-	si3 = 2.0 * ss2 * (sz13 - sz11)
-	sl2 = -2.0 * ss3 * sz2
-	sl3 = -2.0 * ss3 * (sz3 - sz1)
-	sl4 = -2.0 * ss3 * (-21.0 - 9.0*emsq) * zes
-	sgh2 = 2.0 * ss4 * sz32
-	sgh3 = 2.0 * ss4 * (sz33 - sz31)
-	sgh4 = -18.0 * ss4 * zes
-	sh2 = -2.0 * ss2 * sz22
-	sh3 = -2.0 * ss2 * (sz23 - sz21)
+	se2 := 2.0 * ss1 * ss6
+	se3 := 2.0 * ss1 * ss7
+	si2 := 2.0 * ss2 * sz12
+	si3 := 2.0 * ss2 * (sz13 - sz11)
+	sl2 := -2.0 * ss3 * sz2
+	sl3 := -2.0 * ss3 * (sz3 - sz1)
+	sl4 := -2.0 * ss3 * (-21.0 - 9.0*emsq) * zes
+	sgh2 := 2.0 * ss4 * sz32
+	sgh3 := 2.0 * ss4 * (sz33 - sz31)
+	sgh4 := -18.0 * ss4 * zes
+	sh2 := -2.0 * ss2 * sz22
+	sh3 := -2.0 * ss2 * (sz23 - sz21)
 
-	ee2 = 2.0 * s1 * s6
-	e3 = 2.0 * s1 * s7
-	xi2 = 2.0 * s2 * z12
-	xi3 = 2.0 * s2 * (z13 - z11)
-	xl2 = -2.0 * s3 * z2
-	xl3 = -2.0 * s3 * (z3 - z1)
-	xl4 = -2.0 * s3 * (-21.0 - 9.0*emsq) * zel
-	xgh2 = 2.0 * s4 * z32
-	xgh3 = 2.0 * s4 * (z33 - z31)
-	xgh4 = -18.0 * s4 * zel
-	xh2 = -2.0 * s2 * z22
-	xh3 = -2.0 * s2 * (z23 - z21)
+	ee2 := 2.0 * s1 * s6
+	e3 := 2.0 * s1 * s7
+	xi2 := 2.0 * s2 * z12
+	xi3 := 2.0 * s2 * (z13 - z11)
+	xl2 := -2.0 * s3 * z2
+	xl3 := -2.0 * s3 * (z3 - z1)
+	xl4 := -2.0 * s3 * (-21.0 - 9.0*emsq) * zel
+	xgh2 := 2.0 * s4 * z32
+	xgh3 := 2.0 * s4 * (z33 - z31)
+	xgh4 := -18.0 * s4 * zel
+	xh2 := -2.0 * s2 * z22
+	xh3 := -2.0 * s2 * (z23 - z21)
 
 	res.snodm = snodm
 	res.cnodm = cnodm

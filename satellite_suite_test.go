@@ -14,11 +14,6 @@ func TestSatellite(t *testing.T) {
 	RunSpecs(t, "Satellite Suite")
 }
 
-type Result struct {
-	time               float64
-	position, velocity Vector3
-}
-
 var _ = Describe("go-satellite", func() {
 	Describe("ParseTLE", func() {
 		It("should return correctly parsed values for given ISS#25544", func() {

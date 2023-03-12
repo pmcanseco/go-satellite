@@ -3,7 +3,6 @@ package spacetrack
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/pmcanseco/go-satellite"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -11,6 +10,8 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
+
+	"github.com/pmcanseco/go-satellite"
 )
 
 const authURL = "https://www.space-track.org/ajaxauth/login"
