@@ -56,45 +56,6 @@ func gstime(jdut1 float64) (temp float64) {
 	return
 }
 
-// Calc GST given year, month, day, hour, minute and second
-func GSTimeFromDate(year, mon, day, hr, min, sec int) float64 {
-	jDay := JDay(year, mon, day, hr, min, sec)
-	return gstime(jDay)
-}
-
-// Convert Earth Centered Inertial coordinated into equivalent latitude, longitude, altitude and velocity.
-// Reference: http://celestrak.com/columns/v02n03/
-func ECIToLLA(eciCoords Vector3, gmst float64) (altitude, velocity float64, ret LatLong) {
-	a := 6378.137     // Semi-major Axis
-	b := 6356.7523142 // Semi-minor Axis
-	f := (a - b) / a  // Flattening
-	e2 := ((2 * f) - math.Pow(f, 2))
-
-	sqx2y2 := math.Sqrt(math.Pow(eciCoords.X, 2) + math.Pow(eciCoords.Y, 2))
-
-	// Spherical Earth Calculations
-	longitude := math.Atan2(eciCoords.Y, eciCoords.X) - gmst
-	latitude := math.Atan2(eciCoords.Z, sqx2y2)
-
-	// Oblate Earth Fix
-	C := 0.0
-	for i := 0; i < 20; i++ {
-		C = 1 / math.Sqrt(1-e2*(math.Sin(latitude)*math.Sin(latitude)))
-		latitude = math.Atan2(eciCoords.Z+(a*C*e2*math.Sin(latitude)), sqx2y2)
-	}
-
-	// Calc Alt
-	altitude = (sqx2y2 / math.Cos(latitude)) - (a * C)
-
-	// Orbital Speed ≈ sqrt(μ / r) where μ = std. gravitaional parameter
-	velocity = math.Sqrt(398600.4418 / (altitude + 6378.137))
-
-	ret.Latitude = latitude
-	ret.Longitude = longitude
-
-	return
-}
-
 // LatLongDeg converts LatLong in radians to LatLong in degrees
 func LatLongDeg(rad LatLong) (LatLong, error) {
 	var deg LatLong
@@ -133,15 +94,6 @@ func LLAToECI(obsCoords LatLong, alt, jday float64) (eciObs Vector3) {
 	eciObs.X = r * math.Cos(theta)
 	eciObs.Y = r * math.Sin(theta)
 	eciObs.Z = (re + alt) * math.Sin(obsCoords.Latitude)
-	return
-}
-
-// Convert Earth Centered Intertial coordinates into Earth Cenetered Earth Final coordinates
-// Reference: http://ccar.colorado.edu/ASEN5070/handouts/coordsys.doc
-func ECIToECEF(eciCoords Vector3, gmst float64) (ecfCoords Vector3) {
-	ecfCoords.X = eciCoords.X*math.Cos(gmst) + eciCoords.Y*math.Sin(gmst)
-	ecfCoords.Y = eciCoords.X*-math.Sin(gmst) + eciCoords.Y*math.Cos(gmst)
-	ecfCoords.Z = eciCoords.Z
 	return
 }
 
