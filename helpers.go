@@ -2,8 +2,9 @@ package satellite
 
 import (
 	"math"
-	"strconv"
 	"strings"
+
+	"github.com/pmcanseco/go-satellite/strconv"
 )
 
 // Constants
