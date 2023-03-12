@@ -2,9 +2,8 @@ package satellite
 
 import (
 	"math"
+	"strconv"
 	"strings"
-
-	"github.com/pmcanseco/go-satellite/strconv"
 )
 
 // Constants
@@ -72,8 +71,6 @@ func TLEToSat(line1, line2 string, gravConst Gravity) (*Satellite, error) {
 		return nil, err
 	}
 
-	opsmode := "i"
-
 	sat.no = sat.no / XPDOTP
 	sat.ndot = sat.ndot / (XPDOTP * 1440.0)
 	sat.nddot = sat.nddot / (XPDOTP * 1440.0 * 1440)
@@ -94,7 +91,7 @@ func TLEToSat(line1, line2 string, gravConst Gravity) (*Satellite, error) {
 
 	sat.jdsatepoch = JDay(int(year), int(mon), int(day), int(hr), int(min), int(sec))
 
-	sgp4init(&opsmode, sat.jdsatepoch-2433281.5, sat)
+	sgp4init(sat.jdsatepoch-2433281.5, sat)
 
 	return sat, nil
 }

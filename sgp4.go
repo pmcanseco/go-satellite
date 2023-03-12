@@ -5,7 +5,7 @@ import (
 )
 
 // this procedure initializes variables for sgp4.
-func sgp4init(opsmode *string, epoch float64, satrec *Satellite) (position, velocity Vector3) {
+func sgp4init(epoch float64, satrec *Satellite) (position, velocity Vector3) {
 	var cc1sq, cc2, cc3, coef, coef1, cosio4, eeta, etasq, perige, pinvsq, psisq, qzms24, sfour, temp, temp1, temp2, temp3, temp4, tsi, xhdot1 float64
 
 	// Deep space vars
@@ -357,7 +357,7 @@ func sgp4(satrec *Satellite, tsince float64) (position, velocity Vector3) {
 
 	if nm < 0.0 {
 		satrec.Error = 2
-		satrec.ErrorStr = ("Mean motion is less than zero")
+		satrec.ErrorStr = "Mean motion is less than zero"
 	}
 
 	am = math.Pow((xke/nm), x2o3) * tempa * tempa
@@ -366,7 +366,7 @@ func sgp4(satrec *Satellite, tsince float64) (position, velocity Vector3) {
 
 	if em >= 1.0 || em < -0.001 {
 		satrec.Error = 1
-		satrec.ErrorStr = ("mean eccentricity not within range 0.0 <= e < 1.0")
+		satrec.ErrorStr = "mean eccentricity not within range 0.0 <= e < 1.0"
 	}
 
 	if em < 1.0e-6 {
@@ -408,7 +408,7 @@ func sgp4(satrec *Satellite, tsince float64) (position, velocity Vector3) {
 
 		if ep < 0.0 || ep > 1.0 {
 			satrec.Error = 3
-			satrec.ErrorStr = ("perturbed eccentricity not within range 0.0 <= e <= 1.0")
+			satrec.ErrorStr = "perturbed eccentricity not within range 0.0 <= e <= 1.0"
 		}
 	}
 
@@ -428,7 +428,7 @@ func sgp4(satrec *Satellite, tsince float64) (position, velocity Vector3) {
 	aynl = ep*math.Sin(argpp) + temp*satrec.aycof
 	xl = mp + argpp + nodep + temp*satrec.xlcof*axnl
 
-	u = math.Mod((xl - nodep), TWOPI)
+	u = math.Mod(xl-nodep, TWOPI)
 	eo1 = u
 	tem5 = 9999.9
 	ktr := 1
@@ -456,7 +456,7 @@ func sgp4(satrec *Satellite, tsince float64) (position, velocity Vector3) {
 
 	if pl < 0.0 {
 		satrec.Error = 4
-		satrec.ErrorStr = ("semilatus rectum is less than zero")
+		satrec.ErrorStr = "semilatus rectum is less than zero"
 	} else {
 		rl = am * (1.0 - ecose)
 		rdotl = math.Sqrt(am) * esine / rl
@@ -514,7 +514,7 @@ func sgp4(satrec *Satellite, tsince float64) (position, velocity Vector3) {
 
 	if mrt < 1.0 {
 		satrec.Error = 6
-		satrec.ErrorStr = ("mrt is less than 1.0 indicating the satellite has decayed")
+		satrec.ErrorStr = "mrt is less than 1.0 indicating the satellite has decayed"
 	}
 
 	return
